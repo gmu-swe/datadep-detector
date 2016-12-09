@@ -42,7 +42,7 @@ public class HeapWalker {
 		whiteList.clear();
 	}
 
-	public static void addToWhitelist(String s) {  
+	public static void addToWhitelist(String s) {
 		whiteList.add(s);
 	}
 
@@ -233,6 +233,7 @@ public class HeapWalker {
 		testNumToMethod.put(testCount, methodName);
 		testNumToTestClass.put(testCount, className);
 		testCount++;
+		DependencyInfo.CURRENT_TEST_COUNT++;
 		// First - clean up from last generation: make sure that all static
 		// field up-pointers are cleared out
 		for (WeakReference<DependencyInfo> inf : lastGenReachable) {
@@ -270,7 +271,7 @@ public class HeapWalker {
 			for (Field f : allFields) {
 				String fieldName = getFieldFQN(f);
 				// if (!ignores.contains(fieldName)) {
-				if ((Modifier.isStatic(f.getModifiers())) && !((Modifier.isFinal(f.getModifiers())) && (f.getType().isPrimitive())))
+				if ((Modifier.isStatic(f.getModifiers())) && !((Modifier.isFinal(f.getModifiers())) /*&& (f.getType().isPrimitive())*/))
 					try {
 						if (isBlackListedSF(f)) {
 							if (f.getType().isPrimitive()) {
@@ -324,7 +325,6 @@ public class HeapWalker {
 			// }
 		}
 
-		DependencyInfo.CURRENT_TEST_COUNT++;
 		DependencyInfo.IN_CAPTURE = false;
 		return deps;
 	}
