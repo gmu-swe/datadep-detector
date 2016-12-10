@@ -1,6 +1,6 @@
 package example;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -23,35 +23,40 @@ public class ExampleDepDetectionITCase {
 	}
 
 
-
 	@Test
-	public void test1(){
+	public void runTests() throws Exception {
+		doTest1();
+		doTest2();
+		doTest3();
+		doTest4();
+	}
+	
+	public void doTest1(){
 		Example baz = new Example(false, Example.Ex.BAR);
 		System.out.println("test1 "+HeapWalker.walkAndFindDependencies("test1", "test1"));
 	}
 
-	@Test
-	public void test2(){
+	public void doTest2(){
 		bar = new Example(false, Example.Ex.BAR);
 		System.out.println("test2 "+HeapWalker.walkAndFindDependencies("test2", "test2"));
 
 	}
 
-	@Test
-	public void test3(){
+	public void doTest3(){
 		bar.isBar();
 		bar.bar();
 		System.out.println("test3 "+HeapWalker.walkAndFindDependencies("test3", "test3"));
 	}
 
-	@Test
-	public void test4(){
+	public void doTest4(){
 		assertTrue(bar.getBaz().equals(Example.Ex.BAR));
 		bar.setBaz(Example.Ex.FOO);
 		assertTrue(bar.getBaz().equals(Example.Ex.FOO));
 
 		List<StaticFieldDependency> deps = HeapWalker.walkAndFindDependencies("test4", "test4");
+		System.out.println(deps);
 		StaticFieldDependency dep = deps.get(0);
+		System.out.println("Actual: " + dep.depGen);
 		assertTrue("Wrong Generation",dep.depGen == 2);
 		System.out.println("test4 "+deps);
 	}

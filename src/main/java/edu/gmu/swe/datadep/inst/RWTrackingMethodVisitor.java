@@ -116,6 +116,9 @@ public class RWTrackingMethodVisitor extends AdviceAdapter implements Opcodes {
 		}
 		switch (opcode) {
 		case GETFIELD:
+			super.visitInsn(DUP);
+			super.visitMethodInsn(INVOKESTATIC, Type.getInternalName(DependencyInfo.class), "read", "(Ljava/lang/Object;)V", false);
+
 			Type t = Type.getType(desc);
 			switch (t.getSort()) {
 			case Type.ARRAY:
@@ -205,8 +208,8 @@ public class RWTrackingMethodVisitor extends AdviceAdapter implements Opcodes {
 				switch (t.getSize()) {
 				case 1:
 					super.visitInsn(SWAP);
-					super.visitInsn(DUP);
-					super.visitMethodInsn(INVOKESTATIC, Type.getInternalName(DependencyInfo.class), "write", "(Ljava/lang/Object;)V", false);
+//					super.visitInsn(DUP);
+//					super.visitMethodInsn(INVOKESTATIC, Type.getInternalName(DependencyInfo.class), "write", "(Ljava/lang/Object;)V", false);
 					super.visitInsn(DUP);
 					super.visitFieldInsn(Opcodes.GETFIELD, owner, name + "__DEPENDENCY_INFO", Type.getDescriptor(DependencyInfo.class));
 					super.visitMethodInsn(INVOKESTATIC, Type.getInternalName(DependencyInfo.class), "write", "(Ljava/lang/Object;)V", false);
@@ -217,7 +220,8 @@ public class RWTrackingMethodVisitor extends AdviceAdapter implements Opcodes {
 					super.visitInsn(DUP2_X1);
 					super.visitInsn(POP2);
 					super.visitInsn(DUP);
-					super.visitMethodInsn(INVOKESTATIC, Type.getInternalName(DependencyInfo.class), "write", "(Ljava/lang/Object;)V", false);
+					super.visitInsn(POP);
+//					super.visitMethodInsn(INVOKESTATIC, Type.getInternalName(DependencyInfo.class), "write", "(Ljava/lang/Object;)V", false);
 					super.visitInsn(DUP);
 					super.visitFieldInsn(Opcodes.GETFIELD, owner, name + "__DEPENDENCY_INFO", Type.getDescriptor(DependencyInfo.class));
 					super.visitMethodInsn(INVOKESTATIC, Type.getInternalName(DependencyInfo.class), "write", "(Ljava/lang/Object;)V", false);
